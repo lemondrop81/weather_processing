@@ -1,5 +1,6 @@
 from html.parser import HTMLParser
 from html.entities import name2codepoint
+from typing import Counter
 import urllib.request
 
 """
@@ -17,6 +18,7 @@ class WeatherScraper(HTMLParser):
         self.tdTag = False
         self.trTag = False
         self.aTag = False
+        self.counter = 0
 
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
@@ -35,6 +37,7 @@ class WeatherScraper(HTMLParser):
             self.tbodyTag = False
         if tag == 'tr':
             self.trTag = False
+            self.counter = 0
         if tag == 'td':
             self.tdTag = False
         if(tag == 'a'):
@@ -42,8 +45,11 @@ class WeatherScraper(HTMLParser):
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
-        if self.trTag == True and self.tbodyTag == True and self.tdTag == True and self.aTag == False:
+        if self.trTag == True and self.tbodyTag == True and self.tdTag == True and self.aTag == False and self.counter < 3:
             print(data)
+            self.counter = self.counter + 1
+        
+
 
 
 myparser = WeatherScraper()
