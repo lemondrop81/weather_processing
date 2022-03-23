@@ -14,6 +14,7 @@ class WeatherScraper(HTMLParser):
         """Initialize the HTML Parser and initializes the variables."""
         HTMLParser.__init__(self)
         self.tbodyTag = False
+        self.tdTag = False
         self.trTag = False
 
     def handle_starttag(self, tag, attrs):
@@ -22,6 +23,8 @@ class WeatherScraper(HTMLParser):
             self.tbodyTag = True
         if tag == 'tr':
             self.trTag = True
+        if tag == 'td':
+            self.tdTag = True
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
@@ -29,6 +32,13 @@ class WeatherScraper(HTMLParser):
             self.tbodyTag = False
         if tag == 'tr':
             self.trTag = False
+        if tag == 'td':
+            self.tdTag = False
+
+    def handle_data(self, data):
+        """Handles the data inbetween the tags and adds it to a dictionary"""
+        if self.trTag == True and self.tbodyTag == True and self.tdTag == True:
+            print(data)
 
 
 myparser = WeatherScraper()
