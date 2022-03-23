@@ -13,6 +13,15 @@ class WeatherScraper(HTMLParser):
     def __init__(self):
         """Initialize the HTML Parser and initializes the variables."""
         HTMLParser.__init__(self)
+        self.tbodyTag = False
+        self.trTag = False
+
+    def handle_starttag(self, tag, attrs):
+        """Checks which start tag gets opened."""
+        if tag == 'tbody':
+            self.tbodyTag = True
+        if tag == 'tr':
+            self.trTag = True
 
 
 myparser = WeatherScraper()
