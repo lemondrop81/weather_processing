@@ -23,6 +23,13 @@ class WeatherScraper(HTMLParser):
         if tag == 'tr':
             self.trTag = True
 
+    def handle_endtag(self, tag):
+        """Checks which end tag gets closed."""
+        if tag == 'tbody':
+            self.tbodyTag = False
+        if tag == 'tr':
+            self.trTag = False
+
 
 myparser = WeatherScraper()
 
