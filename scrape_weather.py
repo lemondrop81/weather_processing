@@ -20,6 +20,7 @@ class WeatherScraper(HTMLParser):
         self.trTag = False
         self.aTag = False
         self.strongTag = False
+        self.spanTag = False
         self.counter = 0
         self.daysInMonth = 0
         self.current = 0
@@ -50,6 +51,8 @@ class WeatherScraper(HTMLParser):
                     self.aTag = True
         if(tag == 'strong'):
             self.strongTag = True
+        if(tag == 'span'):
+            self.spanTag = True
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
@@ -64,15 +67,17 @@ class WeatherScraper(HTMLParser):
             self.aTag = False
         if(tag == 'strong'):
             self.strongTag = False
+        if(tag == 'span'):
+            self.spanTag = False
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
-        if self.trTag == True and self.tbodyTag == True and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
+        if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
             if self.counter == 3:
                 self.current = self.current + 1
-            if data == 'LegendM' or data == 'M':
-                data = ' '            
+            if data == 'LegendM' or data == 'M' or data == 'E':
+                data = ''            
             print(data)
 
         
