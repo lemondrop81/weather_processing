@@ -1,6 +1,7 @@
 from html.parser import HTMLParser
 from html.entities import name2codepoint
 import urllib.request
+import calendar
 
 """
     Weather processing app
@@ -19,6 +20,12 @@ class WeatherScraper(HTMLParser):
         self.aTag = False
         self.strongTag = False
         self.counter = 0
+
+    def get_data(self):
+        """Gets the data from the URL."""
+        with urllib.request.urlopen('https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year=2018&Month=6') as response:
+            html = str(response.read())
+        self.feed(html)
 
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
@@ -58,7 +65,6 @@ class WeatherScraper(HTMLParser):
 
 myparser = WeatherScraper()
 
-with urllib.request.urlopen('https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year=2018&Month=6') as response:
-    html = str(response.read())
+myparser.get_data()
 
-myparser.feed(html)
+print(calendar.monthrange(2018, 6)[1])
