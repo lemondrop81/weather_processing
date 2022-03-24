@@ -29,8 +29,8 @@ class WeatherScraper(HTMLParser):
         today = datetime.today()
         currentYear = today.year
         currentMonth = today.month
-        self.daysInMonth = calendar.monthrange(currentYear, 1)[1]
-        with urllib.request.urlopen('https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year=2022&Month=1') as response:
+        self.daysInMonth = calendar.monthrange(2018, 3)[1]
+        with urllib.request.urlopen('https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year=2018&Month=3') as response:
             html = str(response.read())
         self.feed(html)
 
@@ -43,7 +43,11 @@ class WeatherScraper(HTMLParser):
         if tag == 'td':
             self.tdTag = True
         if(tag == 'a'):
-            self.aTag = True
+            for name, value in attrs:
+                if 'legend' in value:
+                    self.aTag = False
+                else:
+                    self.aTag = True
         if(tag == 'strong'):
             self.strongTag = True
 
@@ -67,6 +71,8 @@ class WeatherScraper(HTMLParser):
             self.counter = self.counter + 1
             if self.counter == 3:
                 self.current = self.current + 1
+            if data == 'LegendM' or data == 'M':
+                data = ' '            
             print(data)
 
         
