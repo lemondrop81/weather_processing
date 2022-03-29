@@ -24,6 +24,12 @@ class WeatherScraper(HTMLParser):
         self.counter = 0
         self.daysInMonth = 0
         self.current = 0
+        self.daily_temps = {}
+        self.maxTemp = 0
+        self.minTemp = 0
+        self.meanTemp = 0
+
+
 
     def get_data(self):
         """Gets the data from the URL."""
