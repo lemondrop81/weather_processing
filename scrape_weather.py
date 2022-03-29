@@ -80,16 +80,20 @@ class WeatherScraper(HTMLParser):
         """Handles the data inbetween the tags and adds it to a dictionary"""
         if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
-            if self.counter == 3:
-                self.current = self.current + 1
             if data == 'LegendM' or data == 'M' or data == 'E':
                 data = ''            
-            if (self.counter % 3) == 0:
+            if (self.counter % 3) == 1:
                 self.maxTemp = data
-            if (self.counter % 3) == 1:
+            if (self.counter % 3) == 2:
                 self.minTemp = data
-            if (self.counter % 3) == 1:
+            if (self.counter % 3) == 0:
                 self.meanTemp = data
+            if self.counter == 3:
+                self.current = self.current + 1
+                self.daily_temps['Max'] = self.maxTemp
+                self.daily_temps['Min'] = self.minTemp
+                self.daily_temps['Mean'] = self.meanTemp
+                print(self.daily_temps)
 
 
         
