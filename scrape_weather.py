@@ -84,7 +84,13 @@ class WeatherScraper(HTMLParser):
                 self.current = self.current + 1
             if data == 'LegendM' or data == 'M' or data == 'E':
                 data = ''            
-            print(data)
+            if (self.counter % 3) == 0:
+                self.maxTemp = data
+            if (self.counter % 3) == 1:
+                self.minTemp = data
+            if (self.counter % 3) == 1:
+                self.meanTemp = data
+
 
         
 
