@@ -29,6 +29,7 @@ class WeatherScraper(HTMLParser):
         self.maxTemp = 0
         self.minTemp = 0
         self.meanTemp = 0
+        self.day = 0
 
 
 
@@ -90,11 +91,12 @@ class WeatherScraper(HTMLParser):
             if (self.counter % 3) == 0:
                 self.meanTemp = data
             if self.counter == 3:
+                self.day = self.day + 1
                 self.current = self.current + 1
                 self.daily_temps['Max'] = self.maxTemp
                 self.daily_temps['Min'] = self.minTemp
                 self.daily_temps['Mean'] = self.meanTemp
-                print(self.daily_temps)
+                self.weather[self.day] = self.daily_temps
 
 
         
