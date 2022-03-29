@@ -25,6 +25,7 @@ class WeatherScraper(HTMLParser):
         self.daysInMonth = 0
         self.current = 0
         self.daily_temps = {}
+        self.weather = {}
         self.maxTemp = 0
         self.minTemp = 0
         self.meanTemp = 0
