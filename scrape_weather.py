@@ -22,8 +22,12 @@ class WeatherScraper(HTMLParser):
         self.aTag = False
         self.strongTag = False
         self.spanTag = False
+        self.titleTag = False
         self.counter = 0
         self.daysInMonth = 0
+        self.currentMonth = 0
+        self.currentYear = 0
+        self.currentDay = 0
         self.current = 0
         self.daily_temps = {}
         self.weather = {}
@@ -36,6 +40,9 @@ class WeatherScraper(HTMLParser):
         today = datetime.today()
         self.currentYear = today.year
         self.currentMonth = today.month
+        month = calendar.month_name[self.currentMonth]
+        print(month)
+        self.currentDay = today.day
         self.daysInMonth = calendar.monthrange(2018, 3)[1]
         url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.currentYear}&Month={self.currentMonth}"
         with urllib.request.urlopen(url) as response:
@@ -62,6 +69,8 @@ class WeatherScraper(HTMLParser):
             self.strongTag = True
         if(tag == 'span'):
             self.spanTag = True
+        if(tag == 'title'):
+            self.titleTag = True
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
@@ -78,14 +87,19 @@ class WeatherScraper(HTMLParser):
             self.strongTag = False
         if(tag == 'span'):
             self.spanTag = False
+        if(tag == 'title'):
+            self.titleTag = False
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
+        if self.titleTag == True:
+            print(data)
+
         if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
             if data == 'LegendM' or data == 'M' or data == 'E':
                 data = ''            
-            if (self.counter % 3) == 1:
+            if (self.counter % 3) == 1:                    
                 self.daily_temps['Max'] = data
             if (self.counter % 3) == 2:
                 self.daily_temps['Min'] = data
