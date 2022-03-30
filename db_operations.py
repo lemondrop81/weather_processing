@@ -1,5 +1,5 @@
 import sqlite3
-import weather_processing.dbcm as DBCM
+import dbcm
 
 """
     Weather processing app
@@ -13,10 +13,14 @@ class DBOperations():
     def initialize(self):
         """Initialize the database and create the table"""
         try:
-            DBCM.initialize()
+            dbcm.DBCM.initialize(self)
+
             print("Opened database successfully.")
         except Exception as e:
             print("Error opening DB:", e)
+
+    def purge_data(self):
+        """Purges all data from database"""
             
 
 
