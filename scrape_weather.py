@@ -107,15 +107,19 @@ class WeatherScraper(HTMLParser):
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
+        #Check the title tag to see if you reached the end
         if self.titleTag == True:
             if f"{self.month} {self.currentYear}" not in data:
                 self.nextMonth = False
                 return
 
+        #Check to see if you are getting the max, min or mean values
         if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
+            #Checks if the data is missing
             if data == 'LegendM' or data == 'M' or data == 'E':
-                data = ''            
+                data = ''     
+            #use modulus to see which data value you are assigning       
             if (self.counter % 3) == 1:                    
                 self.daily_temps['Max'] = data
             if (self.counter % 3) == 2:
@@ -126,6 +130,7 @@ class WeatherScraper(HTMLParser):
                 self.day = self.day + 1
                 self.current = self.current + 1
                 currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
+                #Deep copy to the dictionary
                 self.weather[currentDate] = copy.deepcopy(self.daily_temps)
 
         
