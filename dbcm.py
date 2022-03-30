@@ -8,17 +8,14 @@ import sqlite3
 class DBCM():
     """Contains database operations"""
 
-    def initialize(self):
+    def initialize(self,weather):
         """Initialize the database and create the table"""
         try:
             conn = sqlite3.connect("weather.sqlite")
             print("Opened database successfully.")
         except Exception as e:
             print("Error opening DB:", e)
-        try:
-            weather = {'2018-06-01': {'Max': 12.0, 'Min': 5.6, 'Mean': 7.1},
-                       '2018-06-02': {'Max': 22.2, 'Min': 11.1, 'Mean': 15.5},
-                       '2018-06-03': {'Max': 31.3, 'Min': 29.9, 'Mean': 30.0}}                 
+        try:    
             c = conn.cursor()
             c.execute("""create table IF NOT EXISTS weather 
                             (id integer primary key autoincrement,
