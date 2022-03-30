@@ -28,6 +28,7 @@ class DBCM():
             print("Table created successfully.")
         except Exception as e:
             print("Error creating table:", e)
+        conn.close()
 
     def add_data(self, weather):
         """Adds the weather to the database"""
@@ -54,4 +55,7 @@ class DBCM():
         except Exception as e:
             print("Error fetching samples.", e)
         conn.close()
+
+    def remove_data(self):
+        """Removes all data from the database"""
 
