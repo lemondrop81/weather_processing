@@ -3,6 +3,7 @@ from html.entities import name2codepoint
 import urllib.request
 import calendar
 from datetime import datetime
+import copy
 
 """
     Weather processing app
@@ -26,9 +27,6 @@ class WeatherScraper(HTMLParser):
         self.current = 0
         self.daily_temps = {}
         self.weather = {}
-        self.maxTemp = 0
-        self.minTemp = 0
-        self.meanTemp = 0
         self.day = 0
 
 
@@ -36,8 +34,8 @@ class WeatherScraper(HTMLParser):
     def get_data(self):
         """Gets the data from the URL."""
         today = datetime.today()
-        currentYear = today.year
-        currentMonth = today.month
+        self.currentYear = 2018
+        self.currentMonth = 3
         self.daysInMonth = calendar.monthrange(2018, 3)[1]
         with urllib.request.urlopen('https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year=2018&Month=3') as response:
             html = str(response.read())
@@ -87,19 +85,16 @@ class WeatherScraper(HTMLParser):
             if data == 'LegendM' or data == 'M' or data == 'E':
                 data = ''            
             if (self.counter % 3) == 1:
-                self.maxTemp = data
+                self.daily_temps['Max'] = data
             if (self.counter % 3) == 2:
-                self.minTemp = data
+                self.daily_temps['Min'] = data
             if (self.counter % 3) == 0:
-                self.meanTemp = data
+                self.daily_temps['Mean'] = data
             if self.counter == 3:
                 self.day = self.day + 1
                 self.current = self.current + 1
-                self.daily_temps['Max'] = self.maxTemp
-                self.daily_temps['Min'] = self.minTemp
-                self.daily_temps['Mean'] = self.meanTemp
-                self.weather[self.current] = self.daily_temps
-
+                currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
+                self.weather[currentDate] = copy.deepcopy(self.daily_temps)
 
         
 
