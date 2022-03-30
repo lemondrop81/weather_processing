@@ -13,7 +13,8 @@ class DBOperations():
     def initialize(self):
         """Initialize the database and create the table"""
         try:
-            dbcm.DBCM.initialize(self)
+            dbcm.DBCM.print_data(self)
+
 
             print("Opened database successfully.")
         except Exception as e:

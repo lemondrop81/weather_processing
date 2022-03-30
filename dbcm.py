@@ -58,4 +58,12 @@ class DBCM():
 
     def remove_data(self):
         """Removes all data from the database"""
+        try:
+            conn = sqlite3.connect("weather.sqlite")
+            c = conn.cursor()
+            c.execute("DELETE FROM weather")
+            conn.commit()
+        except Exception as e:
+            print("Error removing data.", e)
+        conn.close()
 
