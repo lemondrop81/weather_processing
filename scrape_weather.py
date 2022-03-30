@@ -5,6 +5,8 @@ import calendar
 from datetime import datetime
 import copy
 
+from pyparsing import Or
+
 """
     Weather processing app
     March 23, 2022
@@ -40,13 +42,13 @@ class WeatherScraper(HTMLParser):
     def get_data(self):
         """Gets the data from the URL."""
         today = datetime.today()
-        self.currentYear = today.year
-        self.currentMonth = today.month
+        self.currentYear = 1997
+        self.currentMonth = 1
 
         while self.nextMonth:
             self.month = calendar.month_name[self.currentMonth]
             print(self.month)
-            self.currentDay = today.day
+            #self.currentDay = today.day
             self.daysInMonth = calendar.monthrange(self.currentYear, self.currentMonth)[1]
             url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.currentYear}&Month={self.currentMonth}"
             with urllib.request.urlopen(url) as response:
@@ -85,6 +87,8 @@ class WeatherScraper(HTMLParser):
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
+        if self.nextMonth == False:
+            return
         if tag == 'tbody':
             self.tbodyTag = False
         if tag == 'tr':
@@ -104,8 +108,9 @@ class WeatherScraper(HTMLParser):
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
         if self.titleTag == True:
-            if self.month and str(self.currentYear) not in data:
+            if f"{self.month} {self.currentYear}" not in data:
                 self.nextMonth = False
+                return
 
         if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
