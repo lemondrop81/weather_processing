@@ -8,7 +8,7 @@ import sqlite3
 class DBCM():
     """Contains database operations"""
 
-    def initialize(self,weather):
+    def initialize(self):
         """Initialize the database and create the table"""
         try:
             conn = sqlite3.connect("weather.sqlite")
@@ -28,7 +28,6 @@ class DBCM():
             print("Table created successfully.")
         except Exception as e:
             print("Error creating table:", e)
-        self.add_data(weather)
 
     def add_data(self, weather):
         """Adds the weather to the database"""
@@ -45,7 +44,6 @@ class DBCM():
             print("Added sample successfully.")
         except Exception as e:
             print("Error inserting sample.", e)
-        self.print_data()
 
     def print_data(self):
         try:

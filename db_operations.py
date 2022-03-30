@@ -1,10 +1,10 @@
 import sqlite3
-
 import weather_processing.dbcm as DBCM
+
 """
     Weather processing app
     March 30, 2022
-    Description: A simple program to connect to the database.
+    Description: A simple program to add to the database.
 """
 
 class DBOperations():
