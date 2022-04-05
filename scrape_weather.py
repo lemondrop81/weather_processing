@@ -60,9 +60,7 @@ class WeatherScraper(HTMLParser):
                 self.currentYear = self.currentYear - 1
                 self.currentMonth = 12
 
-        for k, v in self.weather.items():
-            print(k, v)
-        db_operations.DBOperations.initialize(self, self.weather)
+        db_operations.DBOperations.initialize(self, sself.weather)
 
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
