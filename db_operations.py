@@ -10,6 +10,10 @@ import dbcm
 class DBOperations():
     """Contains database operations"""
 
+    def initialize_db(self):
+        """Save the data to the database"""
+        dbcm.DBCM.initialize(self)
+
     def save_data(self, weather):
         """Save the data to the database"""
         try:
