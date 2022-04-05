@@ -10,15 +10,14 @@ import dbcm
 class DBOperations():
     """Contains database operations"""
 
-    def initialize(self, weather):
-        """Initialize the database and create the table"""
+    def save_data(self, weather):
+        """Save the data to the database"""
         try:
             dbcm.DBCM.add_data(self, weather)
 
-
-            print("Opened database successfully.")
+            print("Data successfully saved.")
         except Exception as e:
-            print("Error opening DB:", e)
+            print("Error saving data:", e)
 
     def purge_data(self):
         """Purges all data from database"""
