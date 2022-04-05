@@ -10,10 +10,10 @@ import dbcm
 class DBOperations():
     """Contains database operations"""
 
-    def initialize(self):
+    def initialize(self, weather):
         """Initialize the database and create the table"""
         try:
-            dbcm.DBCM.print_data(self)
+            dbcm.DBCM.add_data(self, weather)
 
 
             print("Opened database successfully.")
@@ -28,9 +28,11 @@ class DBOperations():
             print("Data successfully removed.")
         except Exception as e:
             print("Error removing data:", e)
+
+    def print(self):
+        dbcm.DBCM.print_data(self)
             
 
+myparser = DBOperations()
 
-
-MyDb = DBOperations()
-MyDb.initialize()
+myparser.print()

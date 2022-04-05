@@ -5,7 +5,7 @@ import calendar
 from datetime import datetime
 import copy
 
-from pyparsing import Or
+import db_operations
 
 """
     Weather processing app
@@ -42,12 +42,11 @@ class WeatherScraper(HTMLParser):
     def get_data(self):
         """Gets the data from the URL."""
         today = datetime.today()
-        self.currentYear = 1997
-        self.currentMonth = 1
+        self.currentYear = today.year
+        self.currentMonth = today.month
 
         while self.nextMonth:
             self.month = calendar.month_name[self.currentMonth]
-            print(self.month)
             #self.currentDay = today.day
             self.daysInMonth = calendar.monthrange(self.currentYear, self.currentMonth)[1]
             url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.currentYear}&Month={self.currentMonth}"
@@ -63,6 +62,7 @@ class WeatherScraper(HTMLParser):
 
         for k, v in self.weather.items():
             print(k, v)
+        db_operations.DBOperations.initialize(self, self.weather)
 
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
