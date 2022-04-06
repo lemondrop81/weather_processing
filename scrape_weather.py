@@ -59,7 +59,8 @@ class WeatherScraper(HTMLParser):
             if self.currentMonth == 0:
                 self.currentYear = self.currentYear - 1
                 self.currentMonth = 12
-
+                
+        db_operations.DBOperations.initialize_db(self)
         db_operations.DBOperations.save_data(self, self.weather)
 
     def handle_starttag(self, tag, attrs):

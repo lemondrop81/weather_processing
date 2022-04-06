@@ -35,7 +35,7 @@ class DBCM():
         try:
             conn = sqlite3.connect("weather.sqlite")
             c = conn.cursor()
-            sql = """insert into weather (sample_date,location,min_temp,max_temp,avg_temp)
+            sql = """insert OR REPLACE into weather (sample_date,location,min_temp,max_temp,avg_temp)
                     values (?,?,?,?,?)"""
             for k, v in weather.items():
                 data = (k, 'Winnipeg, MB', v['Min'], v['Max'], v['Mean'])
@@ -66,4 +66,3 @@ class DBCM():
         except Exception as e:
             print("Error removing data.", e)
         conn.close()
-
