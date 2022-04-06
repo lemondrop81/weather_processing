@@ -52,6 +52,7 @@ class WeatherScraper(HTMLParser):
             url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.currentYear}&Month={self.currentMonth}"
             with urllib.request.urlopen(url) as response:
                 html = str(response.read())
+                print(url)
             self.feed(html)
             self.currentMonth = self.currentMonth - 1
             self.current = 0

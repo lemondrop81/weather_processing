@@ -63,6 +63,8 @@ class DBCM():
             c = conn.cursor()
             c.execute("DELETE FROM weather")
             conn.commit()
+            c.execute("DROP TABLE weather")
+            conn.commit()
         except Exception as e:
             print("Error removing data.", e)
         conn.close()

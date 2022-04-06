@@ -36,7 +36,3 @@ class DBOperations():
         """Prints the data from database"""
         dbcm.DBCM.print_data(self)
             
-
-myparser = DBOperations()
-
-myparser.print()
