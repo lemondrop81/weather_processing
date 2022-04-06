@@ -11,7 +11,7 @@ class DBOperations():
     """Contains database operations"""
 
     def initialize_db(self):
-        """Save the data to the database"""
+        """Initialize the database"""
         dbcm.DBCM.initialize(self)
 
     def save_data(self, weather):
@@ -33,6 +33,7 @@ class DBOperations():
             print("Error removing data:", e)
 
     def print(self):
+        """Prints the data from database"""
         dbcm.DBCM.print_data(self)
             
 
