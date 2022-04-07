@@ -113,25 +113,53 @@ class WeatherScraper(HTMLParser):
                 self.nextMonth = False
                 return
 
+        if self.titleTag == True:
+            if 'Avg' in data or 'Xtrm' in data or 'Sum' in data:
+                self.trTag == False
+                return
+
         #Check to see if you are getting the max, min or mean values
         if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
             #Checks if the data is missing
-            if data == 'LegendM' or data == 'M' or data == 'E':
-                data = ''     
-            #use modulus to see which data value you are assigning       
-            if (self.counter % 3) == 1:                    
-                self.daily_temps['Max'] = data
-            if (self.counter % 3) == 2:
-                self.daily_temps['Min'] = data
-            if (self.counter % 3) == 0:
-                self.daily_temps['Mean'] = data
-            if self.counter == 3:
-                self.day = self.day + 1
-                self.current = self.current + 1
-                currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
-                #Deep copy to the dictionary
-                self.weather[currentDate] = copy.deepcopy(self.daily_temps)
+            if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
+                self.trTag == False
+                return
+
+            today = datetime.today()
+            currentYear = today.year
+            currentMonth = today.month
+            currentDay = today.day
+
+            if currentYear == self.currentYear and currentMonth == self.currentMonth:
+                if self.current < currentDay - 1:
+                    #use modulus to see which data value you are assigning       
+                    if (self.counter % 3) == 1:                    
+                        self.daily_temps['Max'] = data
+                    if (self.counter % 3) == 2:
+                        self.daily_temps['Min'] = data
+                    if (self.counter % 3) == 0:
+                        self.daily_temps['Mean'] = data
+                    if self.counter == 3:
+                        self.day = self.day + 1
+                        self.current = self.current + 1
+                        currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
+                        #Deep copy to the dictionary
+                        self.weather[currentDate] = copy.deepcopy(self.daily_temps)
+            else:
+                #use modulus to see which data value you are assigning       
+                    if (self.counter % 3) == 1:                    
+                        self.daily_temps['Max'] = data
+                    if (self.counter % 3) == 2:
+                        self.daily_temps['Min'] = data
+                    if (self.counter % 3) == 0:
+                        self.daily_temps['Mean'] = data
+                    if self.counter == 3:
+                        self.day = self.day + 1
+                        self.current = self.current + 1
+                        currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
+                        #Deep copy to the dictionary
+                        self.weather[currentDate] = copy.deepcopy(self.daily_temps)
 
         
 
