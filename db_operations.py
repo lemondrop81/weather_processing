@@ -65,20 +65,19 @@ class DBOperations():
                 print("Successfully removed data from database")
         except Exception as e:
             print("Error removing data.", e)
-        conn.close()
 
-    def print(self):
-        """Prints the data from database"""
+    def fetch_data(self):
+        """returns the data from database"""
         try:
-            conn = sqlite3.connect("weather.sqlite")
-            c = conn.cursor()
-            for row in c.execute("select * from weather"):
-                print(row)
+            with dbcm.DBCM("weather.sqlite") as conn:
+                c = conn.cursor()
+                c.execute("select * from weather")
+                rows = c.fetchall()
+                return rows
         except Exception as e:
-            print("Error fetching samples.", e)
-        conn.close()
+            print("Error fetching data.", e)
             
 
 myparser = DBOperations()
 
-myparser.purge_data()
+myparser.fetch_data()
