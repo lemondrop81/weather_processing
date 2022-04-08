@@ -18,10 +18,9 @@ class DBOperations():
         """Initialize the database and create the table"""
         try:
             with dbcm.DBCM("weather.sqlite") as conn:
-                self.cursor = conn.cursor()
                 print("Opened database successfully.")
                 try:    
-                    c = self.cursor()
+                    c = conn.cursor()
                     c.execute("""create table IF NOT EXISTS weather 
                                     (id integer primary key autoincrement,
                                     sample_date text key not null,
@@ -29,7 +28,7 @@ class DBOperations():
                                     min_temp real,
                                     max_temp real,
                                     avg_temp real);""")
-                    c.commit()
+                    conn.commit()
                     print("Table created successfully.")
                 except Exception as e:
                     print("Error creating table:", e)
