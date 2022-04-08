@@ -55,12 +55,14 @@ class DBOperations():
     def purge_data(self):
         """Purges all data from database"""
         try:
-            conn = sqlite3.connect("weather.sqlite")
-            c = conn.cursor()
-            c.execute("DELETE FROM weather")
-            conn.commit()
-            c.execute("DROP TABLE weather")
-            conn.commit()
+            with dbcm.DBCM("weather.sqlite") as conn:
+                c = conn.cursor()
+                c = conn.cursor()
+                c.execute("DELETE FROM weather")
+                conn.commit()
+                c.execute("DROP TABLE weather")
+                conn.commit()
+                print("Successfully removed data from database", e)
         except Exception as e:
             print("Error removing data.", e)
         conn.close()
