@@ -1,5 +1,6 @@
 import sqlite3
 import dbcm
+import plot_operations
 
 """
     Weather processing app
@@ -73,6 +74,7 @@ class DBOperations():
                 c = conn.cursor()
                 c.execute("select * from weather")
                 rows = c.fetchall()
+                plot_operations.PlotOperations.boxplot(self, rows)
                 return rows
         except Exception as e:
             print("Error fetching data.", e)
