@@ -32,23 +32,22 @@ class DBOperations():
                     print("Table created successfully.")
                 except Exception as e:
                     print("Error creating table:", e)
-
         except Exception as e:
             print("Error opening DB:", e)
 
     def save_data(self, weather):
         """Save the data to the database"""
         try:
-            conn = sqlite3.connect("weather.sqlite")
-            c = conn.cursor()
-            sql = """insert OR REPLACE into weather (sample_date,location,min_temp,max_temp,avg_temp)
-                    values (?,?,?,?,?)"""
-            for k, v in weather.items():
-                data = (k, 'Winnipeg, MB', v['Min'], v['Max'], v['Mean'])
-                c.execute(sql, data)
-                print(data)
-            conn.commit()
-            print("Added sample successfully.")
+            with dbcm.DBCM("weather.sqlite") as conn:
+                c = conn.cursor()
+                sql = """insert OR REPLACE into weather (sample_date,location,min_temp,max_temp,avg_temp)
+                        values (?,?,?,?,?)"""
+                for k, v in weather.items():
+                    data = (k, 'Winnipeg, MB', v['Min'], v['Max'], v['Mean'])
+                    c.execute(sql, data)
+                    print(data)
+                conn.commit()
+                print("Added sample successfully.")
         except Exception as e:
             print("Error inserting sample.", e)
 
@@ -80,4 +79,4 @@ class DBOperations():
 
 myparser = DBOperations()
 
-myparser.initialize()
+myparser.purge_data()

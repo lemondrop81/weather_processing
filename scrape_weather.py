@@ -60,7 +60,7 @@ class WeatherScraper(HTMLParser):
                 self.currentYear = self.currentYear - 1
                 self.currentMonth = 12
                 
-        db_operations.DBOperations.initialize_db(self)
+        db_operations.DBOperations.initialize(self)
         db_operations.DBOperations.save_data(self, self.weather)
 
     def handle_starttag(self, tag, attrs):
@@ -130,7 +130,7 @@ class WeatherScraper(HTMLParser):
             currentDay = today.day
 
             if currentYear == self.currentYear and currentMonth == self.currentMonth:
-                if self.current < currentDay - 1:
+                if self.current < currentDay:
                     #Checks if the data is missing
                     if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
                         self.trTag = False
