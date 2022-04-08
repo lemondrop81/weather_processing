@@ -62,7 +62,7 @@ class DBOperations():
                 conn.commit()
                 c.execute("DROP TABLE weather")
                 conn.commit()
-                print("Successfully removed data from database", e)
+                print("Successfully removed data from database")
         except Exception as e:
             print("Error removing data.", e)
         conn.close()
