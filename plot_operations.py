@@ -23,4 +23,10 @@ class PlotOperations():
         
         groups = [[] for i in range(max(newList))]
         [groups[newList[i]-1].append(meanTemp[i]) for i in range(len(meanTemp))]
-        plt.boxplot(groups)
+        fig = plt.figure()
+        ax  = fig.add_subplot(111)   # define the axis
+        ax.boxplot(groups)
+        ax.set_title('Monthly Temperature Distribution')
+        ax.set_xlabel('Month')
+        ax.set_ylabel('Temperature (Celsius)')
+        plt.show()
