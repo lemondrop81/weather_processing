@@ -78,8 +78,4 @@ class DBOperations():
                 return rows
         except Exception as e:
             print("Error fetching data.", e)
-            
-
-myparser = DBOperations()
-
-myparser.fetch_data()
+        

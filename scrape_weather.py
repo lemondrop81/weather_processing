@@ -168,9 +168,3 @@ class WeatherScraper(HTMLParser):
                     self.weather[currentDate] = copy.deepcopy(self.daily_temps)
 
         
-
-
-
-myparser = WeatherScraper()
-
-myparser.get_data()
