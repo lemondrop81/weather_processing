@@ -1,3 +1,4 @@
+from email.policy import default
 import sqlite3
 import dbcm
 import plot_operations
@@ -67,15 +68,14 @@ class DBOperations():
         except Exception as e:
             print("Error removing data.", e)
 
-    def fetch_data(self):
-        """returns the data from database"""
-        try:
-            with dbcm.DBCM("weather.sqlite") as conn:
-                c = conn.cursor()
-                c.execute("select * from weather")
-                rows = c.fetchall()
-                plot_operations.PlotOperations.lineplot(self, rows)
-                return rows
-        except Exception as e:
-            print("Error fetching data.", e)
+    def fetch_data(self, inital, final):
+       """returns the data from database"""
+       try:
+           with dbcm.DBCM("weather.sqlite") as conn:
+               c = conn.cursor()
+               c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
+               rows = c.fetchall()
+               return rows
+       except Exception as e:
+           print("Error fetching data.", e)
         

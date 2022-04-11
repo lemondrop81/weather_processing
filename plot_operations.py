@@ -10,7 +10,7 @@ import numpy as np
 class PlotOperations():
     """Contains the code for plotting"""
     
-    def boxplot(self, weather):
+    def boxplot(self, weather, initialYear, finalYear):
         """create the box plot"""
         meanTemp = []
         newList = []
