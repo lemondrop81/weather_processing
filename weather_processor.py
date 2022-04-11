@@ -1,3 +1,6 @@
+from scrape_weather import WeatherScraper
+from db_operations import DBOperations
+from plot_operations import PlotOperations
 """
     Weather processing app
     April 11, 2022
