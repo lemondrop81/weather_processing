@@ -30,3 +30,21 @@ class PlotOperations():
         ax.set_xlabel('Month')
         ax.set_ylabel('Temperature (Celsius)')
         plt.show()
+
+    def lineplot(self, weather):
+        """create the line plot"""
+        meanTemp = []
+        date = []
+        for x in weather:
+
+           words = x[1]
+           date.append(words)
+           meanTemp.append(x[5])
+        
+        fig = plt.figure()
+        ax  = fig.add_subplot(111)   # define the axis
+        ax.set_title('Daily Avg Temperatures')
+        ax.set_xlabel('Day of Month')
+        ax.set_ylabel('Average Daily Temp')
+        plt.plot(date, meanTemp)
+        plt.show()
