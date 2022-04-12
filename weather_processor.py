@@ -1,3 +1,4 @@
+from calendar import month
 from scrape_weather import WeatherScraper
 from db_operations import DBOperations
 from plot_operations import PlotOperations
@@ -22,6 +23,12 @@ class WeatherProcessor():
 
         weather = DBOperations.fetch_data(self, initialYear, finalYear)
         PlotOperations.boxplot(self, weather, initialYear, finalYear)
+
+        year = input("Enter year [YYYY]: ")
+        month = input("Enter month [MM]: ")
+
+        weather = DBOperations.fetch_data(self, 0, 0, year, month)
+        PlotOperations.lineplot(self, weather, initialYear, finalYear)
 
 myparser = WeatherProcessor()
 myparser.__init__()

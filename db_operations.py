@@ -71,11 +71,19 @@ class DBOperations():
     def fetch_data(self, inital=default, final=default, year=default, month=default):
        """returns the data from database"""
        try:
-           with dbcm.DBCM("weather.sqlite") as conn:
-               c = conn.cursor()
-               c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
-               rows = c.fetchall()
-               return rows
+           if inital != 0 and final != 0:
+            with dbcm.DBCM("weather.sqlite") as conn:
+                c = conn.cursor()
+                c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
+                rows = c.fetchall()
+                return rows
+           if year != 0 and month != 0:
+               with dbcm.DBCM("weather.sqlite") as conn:
+                c = conn.cursor()
+                c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
+                rows = c.fetchall()
+                return rows
+
        except Exception as e:
            print("Error fetching data.", e)
         
