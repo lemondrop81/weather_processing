@@ -27,8 +27,8 @@ class WeatherProcessor():
         year = input("Enter year [YYYY]: ")
         month = input("Enter month [MM]: ")
 
-        weather = DBOperations.fetch_data(self, 0, 0, year, month)
-        PlotOperations.lineplot(self, weather, initialYear, finalYear)
+        lineplot = DBOperations.fetch_data(self, 0, 0, year, month)
+        PlotOperations.lineplot(self, lineplot)
 
 myparser = WeatherProcessor()
 myparser.__init__()

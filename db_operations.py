@@ -80,7 +80,9 @@ class DBOperations():
            if year != 0 and month != 0:
                with dbcm.DBCM("weather.sqlite") as conn:
                 c = conn.cursor()
-                c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
+                month = month[1:]
+                test = f"select * from weather WHERE sample_date LIKE '{year}-{month}%'"
+                c.execute(test)
                 rows = c.fetchall()
                 return rows
 
