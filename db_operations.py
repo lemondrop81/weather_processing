@@ -68,7 +68,7 @@ class DBOperations():
         except Exception as e:
             print("Error removing data.", e)
 
-    def fetch_data(self, inital, final):
+    def fetch_data(self, inital=default, final=default, year=default, month=default):
        """returns the data from database"""
        try:
            with dbcm.DBCM("weather.sqlite") as conn:
