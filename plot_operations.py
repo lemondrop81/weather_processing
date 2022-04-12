@@ -46,5 +46,7 @@ class PlotOperations():
         ax.set_title('Daily Avg Temperatures')
         ax.set_xlabel('Day of Month')
         ax.set_ylabel('Average Daily Temp')
+        # automaticall set font and rotation for date tick labels
+        plt.gcf().autofmt_xdate()
         plt.plot(date, meanTemp)
         plt.show()
