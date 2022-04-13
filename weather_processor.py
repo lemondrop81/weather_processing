@@ -1,4 +1,3 @@
-from calendar import month
 from scrape_weather import WeatherScraper
 from db_operations import DBOperations
 from plot_operations import PlotOperations
