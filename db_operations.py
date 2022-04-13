@@ -74,27 +74,28 @@ class DBOperations():
        try:
            #Get the latest date from the database
            if inital == NULL and final == NULL and year == NULL and month == NULL:
-                c = conn.cursor()
-                c.execute("SELECT MAX(sample_data) FROM weather")
-                row = c.fetch()
-                return row
+                with dbcm.DBCM("weather.sqlite") as conn:
+                    c = conn.cursor()
+                    c.execute("SELECT MAX(sample_date) FROM weather")
+                    row = c.fetchall()
+                    return row
             # Get the weather data for the boxplot 
            if inital != NULL and final != NULL:
-            with dbcm.DBCM("weather.sqlite") as conn:
-                c = conn.cursor()
-                c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
-                rows = c.fetchall()
-                return rows
+                with dbcm.DBCM("weather.sqlite") as conn:
+                    c = conn.cursor()
+                    c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
+                    rows = c.fetchall()
+                    return rows
             # Get the weather data for the lineplot
            if year != NULL and month != NULL:
-               with dbcm.DBCM("weather.sqlite") as conn:
-                c = conn.cursor()
-                if month[0] == '0':                    
-                    month = month[1:]
-                test = f"select * from weather WHERE sample_date LIKE '{year}-{month}%'"
-                c.execute(test)
-                rows = c.fetchall()
-                return rows
+                with dbcm.DBCM("weather.sqlite") as conn:
+                    c = conn.cursor()
+                    if month[0] == '0':                    
+                        month = month[1:]
+                    test = f"select * from weather WHERE sample_date LIKE '{year}-{month}%'"
+                    c.execute(test)
+                    rows = c.fetchall()
+                    return rows
 
        except Exception as e:
            print("Error fetching data.", e)

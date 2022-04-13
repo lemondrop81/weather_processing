@@ -38,7 +38,7 @@ class WeatherScraper(HTMLParser):
 
 
 
-    def get_data(self):
+    def get_data(self, mostRecent):
         """Gets the data from the URL."""
         today = datetime.today()
         self.currentYear = today.year
@@ -46,7 +46,6 @@ class WeatherScraper(HTMLParser):
 
         while self.nextMonth:
             self.month = calendar.month_name[self.currentMonth]
-            #self.currentDay = today.day
             self.daysInMonth = calendar.monthrange(self.currentYear, self.currentMonth)[1]
             url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.currentYear}&Month={self.currentMonth}"
             with urllib.request.urlopen(url) as response:
