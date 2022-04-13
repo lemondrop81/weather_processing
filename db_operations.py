@@ -72,12 +72,20 @@ class DBOperations():
     def fetch_data(self, inital=default, final=default, year=default, month=default):
        """returns the data from database"""
        try:
+           #Get the latest date from the database
+           if inital == NULL and final == NULL and year == NULL and month == NULL:
+                c = conn.cursor()
+                c.execute("SELECT MAX(sample_data) FROM weather")
+                row = c.fetch()
+                return row
+            # Get the weather data for the boxplot 
            if inital != NULL and final != NULL:
             with dbcm.DBCM("weather.sqlite") as conn:
                 c = conn.cursor()
                 c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
                 rows = c.fetchall()
                 return rows
+            # Get the weather data for the lineplot
            if year != NULL and month != NULL:
                with dbcm.DBCM("weather.sqlite") as conn:
                 c = conn.cursor()
