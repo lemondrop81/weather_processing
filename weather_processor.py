@@ -17,6 +17,9 @@ class WeatherProcessor():
         if userSelection == 'F' or userSelection == 'f':
             DBOperations.purge_data()
             WeatherScraper.get_data()
+
+        if userSelection == 'U' or userSelection == 'u':
+            WeatherScraper.get_data()
         
         initialYear = input("Enter from year [YYYY]: ")
         finalYear = input("Enter to year [YYYY]: ")
