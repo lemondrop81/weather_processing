@@ -32,6 +32,7 @@ class WeatherProcessor():
 
         lineplot = DBOperations.fetch_data(self, 0, 0, year, month)
         PlotOperations.lineplot(self, lineplot)
+        exit()
 
 myparser = WeatherProcessor()
 myparser.__init__()
