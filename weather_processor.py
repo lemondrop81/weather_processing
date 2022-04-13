@@ -35,4 +35,3 @@ class WeatherProcessor():
         exit()
 
 myparser = WeatherProcessor()
-myparser.__init__()
