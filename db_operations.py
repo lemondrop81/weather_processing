@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from email.policy import default
 import sqlite3
 import dbcm
@@ -71,13 +72,13 @@ class DBOperations():
     def fetch_data(self, inital=default, final=default, year=default, month=default):
        """returns the data from database"""
        try:
-           if inital != 0 and final != 0:
+           if inital != NULL and final != NULL:
             with dbcm.DBCM("weather.sqlite") as conn:
                 c = conn.cursor()
                 c.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}" )
                 rows = c.fetchall()
                 return rows
-           if year != 0 and month != 0:
+           if year != NULL and month != NULL:
                with dbcm.DBCM("weather.sqlite") as conn:
                 c = conn.cursor()
                 if month[0] == '0':                    

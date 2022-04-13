@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from scrape_weather import WeatherScraper
 from db_operations import DBOperations
 from plot_operations import PlotOperations
@@ -29,7 +30,7 @@ class WeatherProcessor():
         year = input("Enter year [YYYY]: ")
         month = input("Enter month [MM]: ")
 
-        lineplot = DBOperations.fetch_data(self, 0, 0, year, month)
+        lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
         PlotOperations.lineplot(self, lineplot)
         exit()
 
