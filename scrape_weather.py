@@ -115,11 +115,12 @@ class WeatherScraper(HTMLParser):
                 self.nextMonth = False
                 return
 
-        currentDate = f"{self.currentYear}-{self.currentMonth:02d}-{self.current:02d}"
-        str = ''.join(self.latest)
-        if self.latest != 0 and self.latest > currentDate:
-            self.nextMonth = False
-            return
+        currentDate = f"{self.currentYear}-{self.currentMonth +1:02d}-{self.current:02d}"
+        if self.latest != 0:
+            str = ''.join(self.latest)
+            if str > currentDate:
+                self.nextMonth = False
+                return
         
 
         if self.titleTag == True:
@@ -138,6 +139,7 @@ class WeatherScraper(HTMLParser):
             currentYear = today.year
             currentMonth = today.month
             currentDay = today.day
+            currentDate = f"{self.currentYear}-{self.currentMonth:02d}-{self.current:02d}"
 
             if currentYear == self.currentYear and currentMonth == self.currentMonth:
                 if self.current < currentDay:
