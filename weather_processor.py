@@ -15,8 +15,11 @@ class WeatherProcessor():
         userSelection = input("Fetch all available weather data, update existing, or skip? ([F]ull/[U]pdate/[S]kip): ")
         
         if userSelection == 'F' or userSelection == 'f':
-            DBOperations.purge_data()
-            WeatherScraper.get_data()
+            removeData = DBOperations()
+            removeData.purge_data()
+
+            myparser = WeatherScraper()
+            myparser.get_data(self)
 
         if userSelection == 'U' or userSelection == 'u':
             weather = DBOperations.fetch_data(self,  NULL, NULL,  NULL, NULL)
