@@ -19,11 +19,13 @@ class WeatherProcessor():
             removeData.purge_data()
 
             myparser = WeatherScraper()
-            myparser.get_data(self)
+            myparser.get_data(0)
 
         if userSelection == 'U' or userSelection == 'u':
             weather = DBOperations.fetch_data(self,  NULL, NULL,  NULL, NULL)
-            WeatherScraper.get_data(self, weather)
+
+            myparser = WeatherScraper()
+            myparser.get_data(weather)
         
         initialYear = input("Enter from year [YYYY]: ")
         finalYear = input("Enter to year [YYYY]: ")

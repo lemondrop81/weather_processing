@@ -77,7 +77,7 @@ class DBOperations():
                 with dbcm.DBCM("weather.sqlite") as conn:
                     c = conn.cursor()
                     c.execute("SELECT MAX(sample_date) FROM weather")
-                    row = c.fetchall()
+                    row = c.fetchone()
                     return row
             # Get the weather data for the boxplot 
            if inital != NULL and final != NULL:

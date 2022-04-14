@@ -36,14 +36,16 @@ class WeatherScraper(HTMLParser):
         self.daily_temps = {}
         self.weather = {}
         self.nextMonth = True
+        self.latest = 0
 
 
 
-    def get_data(self, latest=NULL):
+    def get_data(self, latest):
         """Gets the data from the URL."""
         today = datetime.today()
         self.currentYear = today.year
         self.currentMonth = today.month
+        self.latest = latest
 
         while self.nextMonth:
             self.month = calendar.month_name[self.currentMonth]
@@ -60,8 +62,8 @@ class WeatherScraper(HTMLParser):
             if self.currentMonth == 0:
                 self.currentYear = self.currentYear - 1
                 self.currentMonth = 12
-                
-        db_operations.DBOperations.initialize(self)
+        if self.latest == 0:       
+            db_operations.DBOperations.initialize(self)
         db_operations.DBOperations.save_data(self, self.weather)
 
     def handle_starttag(self, tag, attrs):
@@ -113,6 +115,13 @@ class WeatherScraper(HTMLParser):
                 self.nextMonth = False
                 return
 
+        currentDate = f"{self.currentYear}-{self.currentMonth:02d}-{self.current:02d}"
+        str = ''.join(self.latest)
+        if self.latest != 0 and self.latest > currentDate:
+            self.nextMonth = False
+            return
+        
+
         if self.titleTag == True:
             if 'Avg' in data or 'Xtrm' in data or 'Sum' in data:
                 self.trTag = False
@@ -145,10 +154,9 @@ class WeatherScraper(HTMLParser):
                     if (self.counter % 3) == 0:
                         self.daily_temps['Mean'] = data
                     if self.counter == 3:
-                        #self.current = self.current + 1
-                        currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
                         #Deep copy to the dictionary
-                        self.weather[currentDate] = copy.deepcopy(self.daily_temps)
+                        if self.latest == 0 or str < currentDate:
+                            self.weather[currentDate] = copy.deepcopy(self.daily_temps)
             else:
                 #Checks if the data is missing
                 if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
@@ -163,7 +171,6 @@ class WeatherScraper(HTMLParser):
                 if (self.counter % 3) == 0:
                     self.daily_temps['Mean'] = data
                 if self.counter == 3:
-                    #self.current = self.current + 1
-                    currentDate = f"{self.currentYear}-{self.currentMonth}-{self.current}"
                     #Deep copy to the dictionary
-                    self.weather[currentDate] = copy.deepcopy(self.daily_temps)
+                    if self.latest == 0 or str < currentDate:
+                        self.weather[currentDate] = copy.deepcopy(self.daily_temps)
