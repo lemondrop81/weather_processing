@@ -1,9 +1,9 @@
-import sqlite3
 """
     Weather processing app
     March 30, 2022
     Description: A simple context manager for the database
 """
+import sqlite3
 
 class DBCM():
     """Contains database operations"""
