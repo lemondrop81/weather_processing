@@ -81,7 +81,7 @@ class DBOperations():
             if inital != NULL and final != NULL:
                 with dbcm.DBCM("weather.sqlite") as conn:
                     connection = conn.cursor()
-                    connection.execute(f"select * from weather WHERE sample_date BETWEEN {inital}AND{final}")
+                    connection.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}")
                     rows = connection.fetchall()
                     return rows
             # Get the weather data for the lineplot
