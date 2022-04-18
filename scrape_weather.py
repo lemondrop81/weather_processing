@@ -3,6 +3,7 @@
     March 23, 2022
     Description: A simple program to scrape Winnipeg weather data
 """
+
 from html.parser import HTMLParser
 import urllib.request
 import calendar
@@ -12,6 +13,7 @@ import copy
 import db_operations
 
 class WeatherScraper(HTMLParser):
+    """Contains database operations"""
 
     def __init__(self):
         """Initialize the HTML Parser and initializes the variables."""
@@ -24,15 +26,15 @@ class WeatherScraper(HTMLParser):
         self.span_tag = False
         self.title_tag = False
         self.counter = 0
-        self.days_in_month = 0
-        self.current_month = 0
-        self.current_year = 0
-        self.current_day = 0
+        self.daysInMonth = 0
+        self.currentMonth = 0
+        self.currentYear = 0
+        self.currentDay = 0
         self.month = 0
         self.current = 0
         self.daily_temps = {}
         self.weather = {}
-        self.next_month = True
+        self.nextMonth = True
         self.latest = 0
 
 
@@ -40,23 +42,24 @@ class WeatherScraper(HTMLParser):
     def get_data(self, latest):
         """Gets the data from the URL."""
         today = datetime.today()
-        self.current_year = today.year
-        self.current_month = today.month
+        self.currentYear = today.year
+        self.currentMonth = today.month
         self.latest = latest
 
-        while self.next_month:
-            self.month = calendar.month_name[self.current_month]
-            self.days_in_month = calendar.monthrange(self.current_year, self.current_month)[1]
-            url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.current_year}&Month={self.current_month}"
+        while self.nextMonth:
+            self.month = calendar.month_name[self.currentMonth]
+            #self.currentDay = today.day
+            self.daysInMonth = calendar.monthrange(self.currentYear, self.currentMonth)[1]
+            url = f"https://climate.weather.gc.ca/climate_data/daily_data_e.html?StationID=27174&timeframe=2&StartYear=1840&EndYear=2018&Day=1&Year={self.currentYear}&Month={self.currentMonth}"
             with urllib.request.urlopen(url) as response:
                 html = str(response.read())
                 print(url)
             self.feed(html)
-            self.current_month = self.current_month - 1
+            self.currentMonth = self.currentMonth - 1
             self.current = 0
-            if self.current_month == 0:
-                self.current_year = self.current_year - 1
-                self.current_month = 12
+            if self.currentMonth == 0:
+                self.currentYear = self.currentYear - 1
+                self.currentMonth = 12
         if self.latest == 0:
             db_operations.DBOperations.initialize(self)
         db_operations.DBOperations.save_data(self, self.weather)
@@ -84,7 +87,7 @@ class WeatherScraper(HTMLParser):
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
-        if self.next_month == False:
+        if self.nextMonth == False:
             return
         if tag == 'tbody':
             self.tbody_tag = False
@@ -93,28 +96,28 @@ class WeatherScraper(HTMLParser):
             self.counter = 0
         if tag == 'td':
             self.td_tag = False
-        if tag == 'a':
+        if tag == 'a' :
             self.a_tag = False
-        if tag == 'strong':
+        if tag == 'strong' :
             self.strong_tag = False
-        if tag == 'span':
+        if tag == 'span' :
             self.span_tag = False
-        if tag == 'title':
+        if tag == 'title' :
             self.title_tag = False
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
         #Check the title tag to see if you reached the end
         if self.title_tag == True:
-            if f"{self.month} {self.current_year}" not in data:
-                self.next_month = False
+            if f"{self.month} {self.currentYear}" not in data:
+                self.nextMonth = False
                 return
 
-        currentDate = f"{self.current_year}-{self.current_month +1:02d}-{self.current:02d}"
+        currentDate = f"{self.currentYear}-{self.currentMonth +1:02d}-{self.current:02d}"
         if self.latest != 0:
             str = ''.join(self.latest)
             if str > currentDate:
-                self.next_month = False
+                self.nextMonth = False
                 return
 
         if self.title_tag == True:
@@ -123,19 +126,19 @@ class WeatherScraper(HTMLParser):
                 return
 
         #Check to see if you are getting the max, min or mean values
-        if self.tr_tag == True and self.tbody_tag == True and self.span_tag == False and self.td_tag == True and self.a_tag == False and self.counter < 3 and self.strong_tag == False and self.current < self.days_in_month:
+        if self.tr_tag == True and self.tbody_tag == True and self.span_tag == False and self.td_tag == True and self.a_tag == False and self.counter < 3 and self.strong_tag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
             if self.counter == 3:
                 self.current = self.current + 1
 
             today = datetime.today()
-            current_year = today.year
-            current_month = today.month
-            current_day = today.day
-            current_date = f"{self.current_year}-{self.current_month:02d}-{self.current:02d}"
+            currentYear = today.year
+            currentMonth = today.month
+            currentDay = today.day
+            currentDate = f"{self.currentYear}-{self.currentMonth:02d}-{self.current:02d}"
 
-            if current_year == self.current_year and current_month == self.current_month:
-                if self.current < current_day:
+            if currentYear == self.currentYear and currentMonth == self.currentMonth:
+                if self.current < currentDay:
                     #Checks if the data is missing
                     if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
                         self.tr_tag = False
@@ -150,8 +153,8 @@ class WeatherScraper(HTMLParser):
                         self.daily_temps['Mean'] = data
                     if self.counter == 3:
                         #Deep copy to the dictionary
-                        if self.latest == 0 or str < current_date:
-                            self.weather[current_date] = copy.deepcopy(self.daily_temps)
+                        if self.latest == 0 or str < currentDate:
+                            self.weather[currentDate] = copy.deepcopy(self.daily_temps)
             else:
                 #Checks if the data is missing
                 if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
@@ -167,5 +170,5 @@ class WeatherScraper(HTMLParser):
                     self.daily_temps['Mean'] = data
                 if self.counter == 3:
                     #Deep copy to the dictionary
-                    if self.latest == 0 or str < current_date:
-                        self.weather[current_date] = copy.deepcopy(self.daily_temps)
+                    if self.latest == 0 or str < currentDate:
+                        self.weather[currentDate] = copy.deepcopy(self.daily_temps)
