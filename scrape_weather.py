@@ -38,7 +38,7 @@ class WeatherScraper(HTMLParser):
             self.nextMonth = True
             self.latest = 0
         except Exception as inst:
-                print("WeatherScraper:__init__:", inst)
+            print("WeatherScraper:__init__:", inst)
 
 
 
@@ -68,7 +68,7 @@ class WeatherScraper(HTMLParser):
                 db_operations.DBOperations.initialize(self)
             db_operations.DBOperations.save_data(self, self.weather)
         except Exception as inst:
-                print("WeatherScraper:get_data:", inst)
+            print("WeatherScraper:get_data:", inst)
 
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
@@ -92,7 +92,7 @@ class WeatherScraper(HTMLParser):
             if tag == 'title':
                 self.title_tag = True
         except Exception as inst:
-                print("WeatherScraper:handle_starttag:", inst)
+            print("WeatherScraper:handle_starttag:", inst)
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
@@ -115,7 +115,7 @@ class WeatherScraper(HTMLParser):
             if tag == 'title' :
                 self.title_tag = False
         except Exception as inst:
-                print("WeatherScraper:handle_endtag:", inst)
+            print("WeatherScraper:handle_endtag:", inst)
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
