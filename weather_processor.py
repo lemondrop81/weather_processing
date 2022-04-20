@@ -34,16 +34,26 @@ class WeatherProcessor():
                     raise ValueError("Intial year can't be larger then final year")
                 weather = DBOperations.fetch_data(self, initial_year, final_year)
                 PlotOperations.boxplot(self, weather, initial_year, final_year)
-            except Exception as e:
-                print("WeatherProcessor:__init__:year input:", e)
+            except Exception as inst:
+                print("WeatherProcessor:__init__:year input:", inst)
 
-            year = input("Enter year [YYYY]: ")
-            month = input("Enter month [MM]: ")
+            try:
+                year = input("Enter year [YYYY]: ")
+                month = input("Enter month [MM]: ")
+                int(year)
+                int(month)
+                
+                lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
+                PlotOperations.lineplot(self, lineplot)
+            except ValueError:
+                print("WeatherProcessor:__init__: You did not enter a number")
 
-            lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
-            PlotOperations.lineplot(self, lineplot)
             space = input("")
-        except Exception as e:
-            print("WeatherProcessor:__init__:Error:", e)
+        except Exception as inst:
+            print("WeatherProcessor:__init__:Error:", inst)
 
-test = WeatherProcessor()
+if __name__ == "__main__":
+    try:
+        test = WeatherProcessor()
+    except Exception as inst:
+        print(inst)
