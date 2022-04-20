@@ -121,7 +121,7 @@ class WeatherScraper(HTMLParser):
                 return
 
         if self.title_tag == True:
-            if 'Avg' in data or 'Xtrm' in data or 'Sum' in data:
+            if data in ('LegendM', 'M', 'E', '\\xa0'):
                 self.tr_tag = False
                 return
 
@@ -140,7 +140,7 @@ class WeatherScraper(HTMLParser):
             if currentYear == self.currentYear and currentMonth == self.currentMonth:
                 if self.current < currentDay:
                     #Checks if the data is missing
-                    if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
+                    if data in ('LegendM', 'M', 'E', '\\xa0'):
                         self.tr_tag = False
                         self.current = self.current + 1
                         return
@@ -157,7 +157,7 @@ class WeatherScraper(HTMLParser):
                             self.weather[currentDate] = copy.deepcopy(self.daily_temps)
             else:
                 #Checks if the data is missing
-                if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
+                if data in ('LegendM', 'M', 'E', '\\xa0'):
                     self.tr_tag = False
                     self.current = self.current + 1
                     return
