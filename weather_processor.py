@@ -48,12 +48,11 @@ class WeatherProcessor():
             except ValueError:
                 print("WeatherProcessor:__init__: You did not enter a number")
 
-            space = input("")
         except Exception as inst:
             print("WeatherProcessor:__init__:Error:", inst)
 
 if __name__ == "__main__":
     try:
         test = WeatherProcessor()
-    except Exception as inst:
-        print(inst)
+    except Exception as error:
+        print(error)
