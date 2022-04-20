@@ -13,14 +13,10 @@ class DBCM():
         self.db_name = db_name
 
     def __enter__(self):
-        """
-        Open the database connection
-        """
+        """Open the database connection"""
         self.conn = sqlite3.connect(self.db_name)
         return self.conn
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        Close the connection
-        """
+        """Close the connection"""
         self.conn.close()

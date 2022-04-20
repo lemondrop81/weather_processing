@@ -11,7 +11,7 @@ from plot_operations import PlotOperations
 class WeatherProcessor():
     """Contains the code for the user interface"""
     def __init__(self):
-        """Constructor"""
+        """Class Constructor"""
         try:
             user_selection = input("""Fetch all available weather data, update existing, or skip? ([F]ull/[U]pdate/[S]kip): """)
             if user_selection in ('F', 'f'):
