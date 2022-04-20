@@ -12,17 +12,17 @@ class PlotOperations():
         """create the box plot"""
         try:
             mean_temp = []
-            new_list = []
+            box_weather = []
             try:
                 for current_temp in weather:
                     words = current_temp[1]
                     month = words.split('-')
-                    new_list.append(int(month[1]))
+                    box_weather.append(int(month[1]))
                     mean_temp.append(current_temp[5])
             except ValueError as error:
                 print("PlotOperations:boxplot:loop:Error: ", error)
-            groups = [[] for i in range(max(new_list))]
-            [groups[new_list[i]-1].append(mean_temp[i]) for i in range(len(mean_temp))]
+            groups = [[] for i in range(max(box_weather))]
+            [groups[box_weather[i]-1].append(mean_temp[i]) for i in range(len(mean_temp))]
             fig = plt.figure()
             ax  = fig.add_subplot(111)   # define the axis
             ax.boxplot(groups)
