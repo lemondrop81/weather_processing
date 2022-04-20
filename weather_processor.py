@@ -26,19 +26,24 @@ class WeatherProcessor():
 
                 myparser = WeatherScraper()
                 myparser.get_data(weather)
-            initial_year = input("Enter from year [YYYY]: ")
-            final_year = input("Enter to year [YYYY]: ")
+            try:
+                initial_year = input("Enter from year [YYYY]: ")
+                final_year = input("Enter to year [YYYY]: ")
 
-            weather = DBOperations.fetch_data(self, initial_year, final_year)
-            PlotOperations.boxplot(self, weather, initial_year, final_year)
+                if initial_year > final_year:
+                    raise ValueError("Intial year can't be larger then final year")
+                weather = DBOperations.fetch_data(self, initial_year, final_year)
+                PlotOperations.boxplot(self, weather, initial_year, final_year)
+            except Exception as e:
+                print("WeatherProcessor:__init__:year input:", e)
 
             year = input("Enter year [YYYY]: ")
             month = input("Enter month [MM]: ")
-        except ValueError:
-            print("did not enter number")
 
-        lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
-        PlotOperations.lineplot(self, lineplot)
-        space = input("")
+            lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
+            PlotOperations.lineplot(self, lineplot)
+            space = input("")
+        except Exception as e:
+            print("WeatherProcessor:__init__:Error:", e)
 
 test = WeatherProcessor()
