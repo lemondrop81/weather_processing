@@ -7,6 +7,7 @@ from asyncio.windows_events import NULL
 from email.policy import default
 import sqlite3
 import dbcm
+import logging
 
 class DBOperations():
     """Contains database operations"""
@@ -32,9 +33,9 @@ class DBOperations():
                     conn.commit()
                     print("Table created successfully.")
                 except sqlite3.Error as exception:
-                    print("DBOperations:initialize:connection:", exception)
+                    self.logger.error("DBOperations:initialize:connection:", exception)
         except Exception as exception:
-            print("DBOperations:initialize::", exception)
+            self.logger.error("DBOperations:initialize::", exception)
 
     def save_data(self, weather):
         """Save the data to the database"""
@@ -52,9 +53,9 @@ class DBOperations():
                     conn.commit()
                     print("Added sample successfully.")
                 except sqlite3.Error as exception:
-                    print("DBOperations:save_data:connection:", exception)
+                    self.logger.error("DBOperations:save_data:connection:", exception)
         except Exception as exception:
-            print("DBOperations:save_data:", exception)
+            self.logger.error("DBOperations:save_data:", exception)
 
 
     def purge_data(self):
@@ -72,10 +73,10 @@ class DBOperations():
                     connection.execute("DROP TABLE weather")
                     conn.commit()
                 except sqlite3.Error as inst:
-                    print("DBOperations:purge_data:drop:", inst)
+                    self.logger.error("DBOperations:purge_data:drop:", inst)
                 print("Successfully removed data from database")
         except Exception as exception:
-            print("DBOperations:purge_data:", exception)
+            self.logger.error("DBOperations:purge_data:", exception)
 
     def fetch_data(self, inital=default, final=default, year=default, month=default):
         """returns the data from database"""
@@ -89,18 +90,18 @@ class DBOperations():
                         row = connection.fetchone()
                         return row
             except sqlite3.Error as inst:
-                print("DBOperations:fetch_data:latest_date:", inst)
+                self.logger.error("DBOperations:fetch_data:latest_date:", inst)
 
             try:
                 # Get the weather data for the boxplot
                 if inital != NULL and final != NULL:
                     with dbcm.DBCM("weather.sqlite") as conn:
                         connection = conn.cursor()
-                        connection.execute(f"select * from weather WHERE sample_date BETWEEN {inital} AND {final}")
+                        connection.execute(f"select * from weather WHERE sample_date between {inital} AND {final}")
                         rows = connection.fetchall()
                         return rows
             except sqlite3.Error as inst:
-                print("DBOperations:fetch_data:boxplot data:", inst)
+                self.logger.error("DBOperations:fetch_data:boxplot data:", inst)
 
             try:
                 # Get the weather data for the lineplot
@@ -112,8 +113,8 @@ class DBOperations():
                         rows = connection.fetchall()
                         return rows
             except sqlite3.Error as inst:
-                print("DBOperations:fetch_data:lineplot data:", inst)
+                self.logger.error("DBOperations:fetch_data:lineplot data:", inst)
 
         except Exception as exception:
-            print("Error fetching data.", exception)
+            self.logger.error("Error fetching data.", exception)
         

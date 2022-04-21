@@ -4,9 +4,11 @@
     Description: A simple program to add to the database.
 """
 import matplotlib.pyplot as plt
+import logging
 
 class PlotOperations():
     """Contains the code for plotting"""
+    logger = logging.getLogger("PlotOperations:" + __name__)
 
     def boxplot(self, weather, initial_year, final_year):
         """create the box plot"""
@@ -20,7 +22,7 @@ class PlotOperations():
                     box_weather.append(int(month[1]))
                     mean_temp.append(current_temp[5])
             except ValueError as error:
-                print("PlotOperations:boxplot:loop:Error: ", error)
+                self.logger.error('creating an instance of Auxiliary')
             groups = [[] for i in range(max(box_weather))]
             [groups[box_weather[i]-1].append(mean_temp[i]) for i in range(len(mean_temp))]
             fig = plt.figure()
@@ -31,7 +33,7 @@ class PlotOperations():
             ax.set_ylabel('Temperature (Celsius)')
             plt.show()
         except Exception as error:
-            print("PlotOperations:boxplot:Error:", error)
+            self.logger.error('creating an instance of Auxiliary')
 
     def lineplot(self, weather):
         """create the line plot"""
@@ -44,7 +46,7 @@ class PlotOperations():
                     date.append(words)
                     mean_temp.append(current_temp[5])
             except ValueError as error:
-                print("PlotOperations:lineplot:loop:Error: ", error)
+                self.logger.error('creating an instance of Auxiliary')
             fig = plt.figure()
             ax  = fig.add_subplot(111)   # define the axis
             ax.set_title('Daily Avg Temperatures')
@@ -57,4 +59,4 @@ class PlotOperations():
             plt.plot(date, mean_temp)
             plt.show()
         except Exception as error:
-            print("PlotOperations:lineplot:Error:", error)
+            self.logger.error('creating an instance of Auxiliary')
