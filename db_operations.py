@@ -15,10 +15,12 @@ class DBOperations():
     def __init__(self):
         """Constructor"""
         self.cursor = 0
-
+        self.logger = logging.getLogger(__name__)
+        
     def initialize(self):
         """Initialize the database and create the table"""
         try:
+            self.logger = logging.getLogger('DBOperations:initialize')
             with dbcm.DBCM("weather.sqlite") as conn:
                 print("Opened database successfully.")
                 try:
@@ -33,13 +35,14 @@ class DBOperations():
                     conn.commit()
                     print("Table created successfully.")
                 except sqlite3.Error as exception:
-                    self.logger.error("DBOperations:initialize:connection:", exception)
+                    self.logger.INFO("DBOperations:initialize:connection:", exception)
         except Exception as exception:
-            self.logger.error("DBOperations:initialize::", exception)
+            self.logger.INFO("DBOperations:initialize::", exception)
 
     def save_data(self, weather):
         """Save the data to the database"""
         try:
+            self.logger = logging.getLogger('DBOperations:save_data')
             with dbcm.DBCM("weather.sqlite") as conn:
                 try:
                     connection = conn.cursor()
@@ -53,14 +56,15 @@ class DBOperations():
                     conn.commit()
                     print("Added sample successfully.")
                 except sqlite3.Error as exception:
-                    self.logger.error("DBOperations:save_data:connection:", exception)
+                    self.logger.INFO("DBOperations:save_data:connection:", exception)
         except Exception as exception:
-            self.logger.error("DBOperations:save_data:", exception)
+            self.logger.INFO("DBOperations:save_data:", exception)
 
 
     def purge_data(self):
         """Purges all data from database"""
         try:
+            self.logger = logging.getLogger('DBOperations:purge_data')
             with dbcm.DBCM("weather.sqlite") as conn:
                 connection = conn.cursor()
                 connection = conn.cursor()
@@ -73,14 +77,15 @@ class DBOperations():
                     connection.execute("DROP TABLE weather")
                     conn.commit()
                 except sqlite3.Error as inst:
-                    self.logger.error("DBOperations:purge_data:drop:", inst)
+                    self.logger.INFO("DBOperations:purge_data:drop:", inst)
                 print("Successfully removed data from database")
         except Exception as exception:
-            self.logger.error("DBOperations:purge_data:", exception)
+            self.logger.INFO("DBOperations:purge_data:", exception)
 
     def fetch_data(self, inital=default, final=default, year=default, month=default):
         """returns the data from database"""
         try:
+            self.logger = logging.getLogger('DBOperations:fetch_data')
             try:
             #Get the latest date from the database
                 if inital == NULL and final == NULL and year == NULL and month == NULL:
@@ -90,7 +95,7 @@ class DBOperations():
                         row = connection.fetchone()
                         return row
             except sqlite3.Error as inst:
-                self.logger.error("DBOperations:fetch_data:latest_date:", inst)
+                self.logger.INFO("DBOperations:fetch_data:latest_date:", inst)
 
             try:
                 # Get the weather data for the boxplot
@@ -101,7 +106,7 @@ class DBOperations():
                         rows = connection.fetchall()
                         return rows
             except sqlite3.Error as inst:
-                self.logger.error("DBOperations:fetch_data:boxplot data:", inst)
+                self.logger.INFO("DBOperations:fetch_data:boxplot data:", inst)
 
             try:
                 # Get the weather data for the lineplot
@@ -113,8 +118,8 @@ class DBOperations():
                         rows = connection.fetchall()
                         return rows
             except sqlite3.Error as inst:
-                self.logger.error("DBOperations:fetch_data:lineplot data:", inst)
+                self.logger.INFO("DBOperations:fetch_data:lineplot data:", inst)
 
         except Exception as exception:
-            self.logger.error("Error fetching data.", exception)
+            self.logger.INFO("Error fetching data.", exception)
         

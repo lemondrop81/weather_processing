@@ -8,11 +8,19 @@ import logging
 
 class PlotOperations():
     """Contains the code for plotting"""
-    logger = logging.getLogger("PlotOperations:" + __name__)
+
+    def __init__(self):
+        """Constructor"""
+        self.logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename='spam.log',
+                    filemode='a')
 
     def boxplot(self, weather, initial_year, final_year):
         """create the box plot"""
         try:
+            self.logger = logging.getLogger('PlotOperations:boxplot')
             mean_temp = []
             box_weather = []
             try:
@@ -22,7 +30,7 @@ class PlotOperations():
                     box_weather.append(int(month[1]))
                     mean_temp.append(current_temp[5])
             except ValueError as error:
-                self.logger.error('creating an instance of Auxiliary')
+                self.logger.error('PlotOperations:boxplot:for', error)
             groups = [[] for i in range(max(box_weather))]
             [groups[box_weather[i]-1].append(mean_temp[i]) for i in range(len(mean_temp))]
             fig = plt.figure()
@@ -33,11 +41,12 @@ class PlotOperations():
             ax.set_ylabel('Temperature (Celsius)')
             plt.show()
         except Exception as error:
-            self.logger.error('creating an instance of Auxiliary')
+            self.logging.INFO('PlotOperations:boxplot', error)
 
     def lineplot(self, weather):
         """create the line plot"""
         try:
+            self.logging = logging.getLogger('PlotOperations:lineplot')
             mean_temp = []
             date = []
             try:
@@ -46,7 +55,7 @@ class PlotOperations():
                     date.append(words)
                     mean_temp.append(current_temp[5])
             except ValueError as error:
-                self.logger.error('creating an instance of Auxiliary')
+                self.logger.error('PlotOperations:lineplot')
             fig = plt.figure()
             ax  = fig.add_subplot(111)   # define the axis
             ax.set_title('Daily Avg Temperatures')
@@ -59,4 +68,4 @@ class PlotOperations():
             plt.plot(date, mean_temp)
             plt.show()
         except Exception as error:
-            self.logger.error('creating an instance of Auxiliary')
+            self.logging.INFO('PlotOperations:lineplot', error)
