@@ -77,44 +77,50 @@ class WeatherScraper(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
-        if tag == 'tbody':
-            self.tbody_tag = True
-        if tag == 'tr':
-            self.tr_tag = True
-        if tag == 'td':
-            self.td_tag = True
-        if(tag == 'a'):
-            for name, value in attrs:
-                if 'legend' in value:
-                    self.a_tag = False
-                else:
-                    self.a_tag = True
-        if(tag == 'strong'):
-            self.strong_tag = True
-        if(tag == 'span'):
-            self.span_tag = True
-        if(tag == 'title'):
-            self.title_tag = True
+        try:
+            if tag == 'tbody':
+                self.tbody_tag = True
+            if tag == 'tr':
+                self.tr_tag = True
+            if tag == 'td':
+                self.td_tag = True
+            if(tag == 'a'):
+                for value in attrs:
+                    if 'legend' in value:
+                        self.a_tag = False
+                    else:
+                        self.a_tag = True
+            if(tag == 'strong'):
+                self.strong_tag = True
+            if(tag == 'span'):
+                self.span_tag = True
+            if(tag == 'title'):
+                self.title_tag = True
+        except Exception as exception:
+            self.logger.INFO("WeatherScraper:get_data:", exception)
 
     def handle_endtag(self, tag):
         """Checks which end tag gets closed."""
-        if self.next_month == False:
-            return
-        if tag == 'tbody':
-            self.tbody_tag = False
-        if tag == 'tr':
-            self.tr_tag = False
-            self.counter = 0
-        if tag == 'td':
-            self.td_tag = False
-        if(tag == 'a'):
-            self.a_tag = False
-        if(tag == 'strong'):
-            self.strong_tag = False
-        if(tag == 'span'):
-            self.span_tag = False
-        if(tag == 'title'):
-            self.title_tag = False
+        try:
+            if self.next_month == False:
+                return
+            if tag == 'tbody':
+                self.tbody_tag = False
+            if tag == 'tr':
+                self.tr_tag = False
+                self.counter = 0
+            if tag == 'td':
+                self.td_tag = False
+            if(tag == 'a'):
+                self.a_tag = False
+            if(tag == 'strong'):
+                self.strong_tag = False
+            if(tag == 'span'):
+                self.span_tag = False
+            if(tag == 'title'):
+                self.title_tag = False
+        except Exception as exception:
+            self.logger.INFO("WeatherScraper:get_data:", exception)
 
     def handle_data(self, data):
         """Handles the data inbetween the tags and adds it to a dictionary"""
