@@ -6,8 +6,8 @@
 from asyncio.windows_events import NULL
 from email.policy import default
 import sqlite3
-import dbcm
 import logging
+import dbcm
 
 class DBOperations():
     """Contains database operations"""
@@ -16,7 +16,7 @@ class DBOperations():
         """Constructor"""
         self.cursor = 0
         self.logger = logging.getLogger(__name__)
-        
+
     def initialize(self):
         """Initialize the database and create the table"""
         try:
