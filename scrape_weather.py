@@ -1,6 +1,9 @@
-from asyncio.windows_events import NULL
+"""
+    Weather processing app
+    March 23, 2022
+    Description: A simple program to scrape Winnipeg weather data
+"""
 from html.parser import HTMLParser
-from html.entities import name2codepoint
 import urllib.request
 import calendar
 from datetime import datetime
@@ -8,14 +11,9 @@ import copy
 import logging
 import db_operations
 
-"""
-    Weather processing app
-    March 23, 2022
-    Description: A simple program to scrape Winnipeg weather data
-"""
 
 class WeatherScraper(HTMLParser):
-    
+
     def __init__(self):
         """Initialize the HTML Parser and initializes the variables."""
         try:
@@ -51,7 +49,7 @@ class WeatherScraper(HTMLParser):
             self.currentYear = today.year
             self.currentMonth = today.month
             self.latest = latest
-            
+
             while self.nextMonth:
                 self.month = calendar.month_name[self.currentMonth]
                 #self.currentDay = today.day
@@ -63,11 +61,11 @@ class WeatherScraper(HTMLParser):
                 self.feed(html)
                 self.currentMonth = self.currentMonth - 1
                 self.current = 0
-                
+
                 if self.currentMonth == 0:
                     self.currentYear = self.currentYear - 1
                     self.currentMonth = 12
-            if self.latest == 0:       
+            if self.latest == 0:
                 db_operations.DBOperations.initialize(self)
             db_operations.DBOperations.save_data(self, self.weather)
         except Exception as exception:
@@ -76,7 +74,7 @@ class WeatherScraper(HTMLParser):
     def handle_starttag(self, tag, attrs):
         """Checks which start tag gets opened."""
         if tag == 'tbody':
-            self.tbodyTag = True        
+            self.tbodyTag = True
         if tag == 'tr':
             self.trTag = True
         if tag == 'td':
@@ -128,7 +126,6 @@ class WeatherScraper(HTMLParser):
             if str > currentDate:
                 self.nextMonth = False
                 return
-        
 
         if self.titleTag == True:
             if 'Avg' in data or 'Xtrm' in data or 'Sum' in data:
@@ -138,7 +135,7 @@ class WeatherScraper(HTMLParser):
         #Check to see if you are getting the max, min or mean values
         if self.trTag == True and self.tbodyTag == True and self.spanTag == False and self.tdTag == True and self.aTag == False and self.counter < 3 and self.strongTag == False and self.current < self.daysInMonth:
             self.counter = self.counter + 1
-            
+
             if self.counter == 3:
                 self.current = self.current + 1
 
@@ -155,8 +152,8 @@ class WeatherScraper(HTMLParser):
                         self.trTag = False
                         self.current = self.current + 1
                         return
-                    #use modulus to see which data value you are assigning       
-                    if (self.counter % 3) == 1:                    
+                    #use modulus to see which data value you are assigning
+                    if (self.counter % 3) == 1:
                         self.daily_temps['Max'] = data
                     if (self.counter % 3) == 2:
                         self.daily_temps['Min'] = data
@@ -172,8 +169,8 @@ class WeatherScraper(HTMLParser):
                     self.trTag = False
                     self.current = self.current + 1
                     return
-                #use modulus to see which data value you are assigning       
-                if (self.counter % 3) == 1:                    
+                #use modulus to see which data value you are assigning
+                if (self.counter % 3) == 1:
                     self.daily_temps['Max'] = data
                 if (self.counter % 3) == 2:
                     self.daily_temps['Min'] = data
