@@ -20,7 +20,6 @@ class DBOperations():
     def initialize(self):
         """Initialize the database and create the table"""
         try:
-            self.logger = logging.getLogger('DBOperations:initialize')
             with dbcm.DBCM("weather.sqlite") as conn:
                 print("Opened database successfully.")
                 try:
@@ -42,7 +41,6 @@ class DBOperations():
     def save_data(self, weather):
         """Save the data to the database"""
         try:
-            self.logger = logging.getLogger('DBOperations:save_data')
             with dbcm.DBCM("weather.sqlite") as conn:
                 try:
                     connection = conn.cursor()
@@ -64,7 +62,6 @@ class DBOperations():
     def purge_data(self):
         """Purges all data from database"""
         try:
-            self.logger = logging.getLogger('DBOperations:purge_data')
             with dbcm.DBCM("weather.sqlite") as conn:
                 connection = conn.cursor()
                 connection = conn.cursor()
@@ -85,7 +82,6 @@ class DBOperations():
     def fetch_data(self, inital=default, final=default, year=default, month=default):
         """returns the data from database"""
         try:
-            self.logger = logging.getLogger('DBOperations:fetch_data')
             try:
             #Get the latest date from the database
                 if inital == NULL and final == NULL and year == NULL and month == NULL:

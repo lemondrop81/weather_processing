@@ -5,7 +5,6 @@
 """
 from asyncio.windows_events import NULL
 import logging
-from pickle import FALSE
 from scrape_weather import WeatherScraper
 from db_operations import DBOperations
 from plot_operations import PlotOperations
@@ -54,7 +53,7 @@ class WeatherProcessor():
                 month = input("Enter month [MM]: ")
 
                 if year.isdigit() is False or month.isdigit() is False:
-                    raise ValueError("WeatherProcessor:__init__: You did not enter a number")                           
+                    raise ValueError("WeatherProcessor:__init__: You did not enter a number")
                 lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
                 PlotOperations.lineplot(self, lineplot)
             except Exception as inst:
