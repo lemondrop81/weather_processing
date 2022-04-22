@@ -11,11 +11,6 @@ class PlotOperations():
 
     def __init__(self):
         """Constructor"""
-        self.logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    filename='spam.log',
-                    filemode='a')
 
     def boxplot(self, weather, initial_year, final_year):
         """create the box plot"""
@@ -41,12 +36,12 @@ class PlotOperations():
             ax.set_ylabel('Temperature (Celsius)')
             plt.show()
         except Exception as error:
-            self.logging.INFO('PlotOperations:boxplot', error)
+            self.logger.INFO('PlotOperations:boxplot', error)
 
     def lineplot(self, weather):
         """create the line plot"""
         try:
-            self.logging = logging.getLogger('PlotOperations:lineplot')
+            self.logger = logging.getLogger('PlotOperations:lineplot')
             mean_temp = []
             date = []
             try:
@@ -68,4 +63,4 @@ class PlotOperations():
             plt.plot(date, mean_temp)
             plt.show()
         except Exception as error:
-            self.logging.INFO('PlotOperations:lineplot', error)
+            self.logger.INFO('PlotOperations:lineplot', error)

@@ -12,10 +12,10 @@ from plot_operations import PlotOperations
 
 class WeatherProcessor():
     """Contains the code for the user interface"""
-    logger = logging.getLogger('spam_application')
+    logger = logging.getLogger('Weather Processor')
     logger.setLevel(logging.DEBUG)
     # create file handler which logs even debug messages
-    fh = logging.FileHandler('spam.log')
+    fh = logging.FileHandler('error.log')
     fh.setLevel(logging.DEBUG)
     # create formatter and add it to the handlers
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

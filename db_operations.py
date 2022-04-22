@@ -91,7 +91,7 @@ class DBOperations():
                 if inital == NULL and final == NULL and year == NULL and month == NULL:
                     with dbcm.DBCM("weather.sqlite") as conn:
                         connection = conn.cursor()
-                        connection.execute("SELECT MAX(sample_date) FROM goat")
+                        connection.execute("SELECT MAX(sample_date) FROM weather")
                         row = connection.fetchone()
                         return row
             except sqlite3.Error as inst:
