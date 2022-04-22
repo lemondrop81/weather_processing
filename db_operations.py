@@ -14,8 +14,13 @@ class DBOperations():
 
     def __init__(self):
         """Constructor"""
-        self.cursor = 0
-        self.logger = logging.getLogger(__name__)
+        try:
+            self.cursor = 0
+            self.logger = logging.getLogger(__name__)
+        except Exception as exception:
+            self.logger.INFO("DBOperations:initialize::", exception)
+
+
 
     def initialize(self):
         """Initialize the database and create the table"""

@@ -11,19 +11,19 @@ from plot_operations import PlotOperations
 
 class WeatherProcessor():
     """Contains the code for the user interface"""
-    logger = logging.getLogger('Weather Processor')
-    logger.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler('error.log')
-    fh.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    # add the handlers to the logger
-    logger.addHandler(fh)
     def __init__(self):
         """Class Constructor"""
         try:
+            logger = logging.getLogger('Weather Processor')
+            logger.setLevel(logging.DEBUG)
+            # create file handler which logs even debug messages
+            fh = logging.FileHandler('error.log')
+            fh.setLevel(logging.DEBUG)
+            # create formatter and add it to the handlers
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            fh.setFormatter(formatter)
+            # add the handlers to the logger
+            logger.addHandler(fh)
             user_selection = input("""Fetch all available weather data, update existing, or skip? ([F]ull/[U]pdate/[S]kip): """)
             if user_selection in ('F', 'f'):
                 remove_data = DBOperations()
