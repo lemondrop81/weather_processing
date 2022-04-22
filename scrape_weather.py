@@ -137,8 +137,8 @@ class WeatherScraper(HTMLParser):
             try:
                 current_date = f"{self.current_year}-{self.current_month +1:02d}-{self.current:02d}"
                 if self.latest != 0:
-                    current= ''.join(self.latest)
-                    if current> current_date:
+                    date= ''.join(self.latest)
+                    if date> current_date:
                         self.next_month = False
                         return
             except ValueError:
@@ -152,22 +152,19 @@ class WeatherScraper(HTMLParser):
             except ValueError:
                 self.logger.INFO("WeatherScraper:handle_data:avg/xtrm/sum")
 
-            try:
-                #Check to see if you are getting the max, min or mean values
-                if self.tr_tag == True and self.tbody_tag == True and self.span_tag == False and self.td_tag == True and self.a_tag == False and self.counter < 3 and self.strong_tag == False and self.current < self.days_in_month:
-                    self.counter = self.counter + 1
+            #Check to see if you are getting the max, min or mean values
+            if self.tr_tag == True and self.tbody_tag == True and self.span_tag == False and self.td_tag == True and self.a_tag == False and self.counter < 3 and self.strong_tag == False and self.current < self.days_in_month:
+                self.counter = self.counter + 1
 
-                    if self.counter == 3:
-                        self.current = self.current + 1
+                if self.counter == 3:
+                    self.current = self.current + 1
 
-                    today = datetime.today()
-                    current_year = today.year
-                    current_month = today.month
-                    current_day = today.day
-                    current_date = f"{self.current_year}-{self.current_month:02d}-{self.current:02d}"
-            except ValueError:
-                self.logger.INFO("WeatherScraper:handle_data:max/min or mean values")
-            try:
+                today = datetime.today()
+                current_year = today.year
+                current_month = today.month
+                current_day = today.day
+                current_date = f"{self.current_year}-{self.current_month:02d}-{self.current:02d}"
+
                 if current_year == self.current_year and current_month == self.current_month:
                     if self.current < current_day:
                         #Checks if the data is missing
@@ -184,26 +181,24 @@ class WeatherScraper(HTMLParser):
                             self.daily_temps['Mean'] = data
                         if self.counter == 3:
                             #Deep copy to the dictionary
-                            if self.latest == 0 or current< current_date:
+                            if self.latest == 0 or date< current_date:
                                 self.weather[current_date] = copy.deepcopy(self.daily_temps)
-            except ValueError:
-                self.logger.INFO("WeatherScraper:handle_data:Update")
-            else:
-                #Checks if the data is missing
-                if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
-                    self.tr_tag = False
-                    self.current = self.current + 1
-                    return
-                #use modulus to see which data value you are assigning
-                if (self.counter % 3) == 1:
-                    self.daily_temps['Max'] = data
-                if (self.counter % 3) == 2:
-                    self.daily_temps['Min'] = data
-                if (self.counter % 3) == 0:
-                    self.daily_temps['Mean'] = data
-                if self.counter == 3:
-                    #Deep copy to the dictionary
-                    if self.latest == 0 or current< current_date:
-                        self.weather[current_date] = copy.deepcopy(self.daily_temps)
+                else:
+                    #Checks if the data is missing
+                    if data == 'LegendM' or data == 'M' or data == 'E' or data == "\xa0":
+                        self.tr_tag = False
+                        self.current = self.current + 1
+                        return
+                    #use modulus to see which data value you are assigning
+                    if (self.counter % 3) == 1:
+                        self.daily_temps['Max'] = data
+                    if (self.counter % 3) == 2:
+                        self.daily_temps['Min'] = data
+                    if (self.counter % 3) == 0:
+                        self.daily_temps['Mean'] = data
+                    if self.counter == 3:
+                        #Deep copy to the dictionary
+                        if self.latest == 0 or date< current_date:
+                            self.weather[current_date] = copy.deepcopy(self.daily_temps)
         except Exception as exception:
             self.logger.INFO("WeatherScraper:handle_data:", exception)
