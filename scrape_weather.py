@@ -85,7 +85,7 @@ class WeatherScraper(HTMLParser):
             if tag == 'td':
                 self.td_tag = True
             if(tag == 'a'):
-                for value in attrs:
+                for name, value in attrs:
                     if 'legend' in value:
                         self.a_tag = False
                     else:
