@@ -137,8 +137,8 @@ class WeatherScraper(HTMLParser):
             try:
                 current_date = f"{self.current_year}-{self.current_month +1:02d}-{self.current:02d}"
                 if self.latest != 0:
-                    str = ''.join(self.latest)
-                    if str > current_date:
+                    current= ''.join(self.latest)
+                    if current> current_date:
                         self.next_month = False
                         return
             except ValueError:
@@ -181,7 +181,7 @@ class WeatherScraper(HTMLParser):
                             self.daily_temps['Mean'] = data
                         if self.counter == 3:
                             #Deep copy to the dictionary
-                            if self.latest == 0 or str < current_date:
+                            if self.latest == 0 or current< current_date:
                                 self.weather[current_date] = copy.deepcopy(self.daily_temps)
                 else:
                     #Checks if the data is missing
@@ -198,7 +198,7 @@ class WeatherScraper(HTMLParser):
                         self.daily_temps['Mean'] = data
                     if self.counter == 3:
                         #Deep copy to the dictionary
-                        if self.latest == 0 or str < current_date:
+                        if self.latest == 0 or current< current_date:
                             self.weather[current_date] = copy.deepcopy(self.daily_temps)
         except Exception as exception:
             self.logger.INFO("WeatherScraper:handle_data:", exception)

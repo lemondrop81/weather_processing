@@ -76,7 +76,7 @@ class DBOperations():
                 except sqlite3.Error as inst:
                     print("DBOperations:purge_data:delete:", inst)
                 try:
-                    connection.execute("DROP TABLE weather")
+                    connection.execute("DROP TABLE IF EXISTS weather")
                     conn.commit()
                 except sqlite3.Error as inst:
                     self.logger.INFO("DBOperations:purge_data:drop:", inst)
