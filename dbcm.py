@@ -14,8 +14,9 @@ class DBCM():
         try:
             self.db_name = db_name
             self.logger = logging.getLogger(__name__)
+            self.conn = ""
         except Exception as inst:
-            self.logger.debug(inst)
+            self.logger.INFO(inst)
 
     def __enter__(self):
         """Open the database connection"""
@@ -23,11 +24,11 @@ class DBCM():
             self.conn = sqlite3.connect(self.db_name)
             return self.conn
         except Exception as inst:
-            self.logger.debug(inst)
+            self.logger.INFO(inst)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Close the connection"""
         try:
             self.conn.close()
         except Exception as inst:
-            self.logger.debug(inst)
+            self.logger.INFO(inst)
