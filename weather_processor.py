@@ -3,7 +3,6 @@
     April 11, 2022
     Description: A simple program to add user interface.
 """
-from asyncio.windows_events import NULL
 import logging
 from scrape_weather import WeatherScraper
 from db_operations import DBOperations
@@ -14,16 +13,16 @@ class WeatherProcessor():
     def __init__(self):
         """Class Constructor"""
         try:
-            logger = logging.getLogger('Weather Processor')
-            logger.setLevel(logging.DEBUG)
+            self.logger = logging.getLogger('Weather Processor')
+            self.logger.setLevel(logging.DEBUG)
             # create file handler which logs even debug messages
-            fh = logging.FileHandler('error.log')
-            fh.setLevel(logging.DEBUG)
+            error_log = logging.FileHandler('error.log')
+            error_log.setLevel(logging.DEBUG)
             # create formatter and add it to the handlers
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            fh.setFormatter(formatter)
+            error_log.setFormatter(formatter)
             # add the handlers to the logger
-            logger.addHandler(fh)
+            self.logger.addHandler(error_log)
             user_selection = input("""Fetch all available weather data, update existing, or skip? ([F]ull/[U]pdate/[S]kip): """)
             if user_selection in ('F', 'f'):
                 remove_data = DBOperations()
@@ -33,7 +32,7 @@ class WeatherProcessor():
                 myparser.get_data(0)
 
             if user_selection in ('U', 'u'):
-                weather = DBOperations.fetch_data(self,  NULL, NULL,  NULL, NULL)
+                weather = DBOperations.fetch_data(self)
 
                 myparser = WeatherScraper()
                 myparser.get_data(weather)
@@ -54,7 +53,7 @@ class WeatherProcessor():
 
                 if year.isdigit() is False or month.isdigit() is False:
                     raise ValueError("WeatherProcessor:__init__: You did not enter a number")
-                lineplot = DBOperations.fetch_data(self, NULL, NULL, year, month)
+                lineplot = DBOperations.fetch_data(self, 0, 0, year, month)
                 PlotOperations.lineplot(self, lineplot)
             except Exception as inst:
                 self.logger.ERROR(inst)

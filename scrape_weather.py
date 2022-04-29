@@ -84,17 +84,17 @@ class WeatherScraper(HTMLParser):
                 self.tr_tag = True
             if tag == 'td':
                 self.td_tag = True
-            if(tag == 'a'):
-                for value in attrs:
+            if tag == 'a':
+                for name, value in attrs:
                     if 'legend' in value:
                         self.a_tag = False
                     else:
                         self.a_tag = True
-            if(tag == 'strong'):
+            if tag == 'strong':
                 self.strong_tag = True
-            if(tag == 'span'):
+            if tag == 'span':
                 self.span_tag = True
-            if(tag == 'title'):
+            if tag == 'title':
                 self.title_tag = True
         except Exception as exception:
             self.logger.INFO("WeatherScraper:get_data:", exception)
@@ -111,13 +111,13 @@ class WeatherScraper(HTMLParser):
                 self.counter = 0
             if tag == 'td':
                 self.td_tag = False
-            if(tag == 'a'):
+            if tag == 'a':
                 self.a_tag = False
-            if(tag == 'strong'):
+            if tag == 'strong':
                 self.strong_tag = False
-            if(tag == 'span'):
+            if tag == 'span':
                 self.span_tag = False
-            if(tag == 'title'):
+            if tag == 'title':
                 self.title_tag = False
         except Exception as exception:
             self.logger.INFO("WeatherScraper:get_data:", exception)
@@ -137,8 +137,8 @@ class WeatherScraper(HTMLParser):
             try:
                 current_date = f"{self.current_year}-{self.current_month +1:02d}-{self.current:02d}"
                 if self.latest != 0:
-                    date= ''.join(self.latest)
-                    if date> current_date:
+                    current= ''.join(self.latest)
+                    if current> current_date:
                         self.next_month = False
                         return
             except ValueError:
@@ -181,7 +181,7 @@ class WeatherScraper(HTMLParser):
                             self.daily_temps['Mean'] = data
                         if self.counter == 3:
                             #Deep copy to the dictionary
-                            if self.latest == 0 or date< current_date:
+                            if self.latest == 0 or current< current_date:
                                 self.weather[current_date] = copy.deepcopy(self.daily_temps)
                 else:
                     #Checks if the data is missing
@@ -198,7 +198,7 @@ class WeatherScraper(HTMLParser):
                         self.daily_temps['Mean'] = data
                     if self.counter == 3:
                         #Deep copy to the dictionary
-                        if self.latest == 0 or date< current_date:
+                        if self.latest == 0 or current< current_date:
                             self.weather[current_date] = copy.deepcopy(self.daily_temps)
         except Exception as exception:
             self.logger.INFO("WeatherScraper:handle_data:", exception)

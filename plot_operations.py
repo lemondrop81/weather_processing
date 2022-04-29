@@ -11,7 +11,10 @@ class PlotOperations():
 
     def __init__(self):
         """Constructor"""
-        self.logger = logging.getLogger(__name__)
+        try:
+            self.logger = logging.getLogger(__name__)
+        except Exception as error:
+            self.logger.INFO(error)
 
     def boxplot(self, weather, initial_year, final_year):
         """create the box plot"""

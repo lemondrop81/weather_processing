@@ -3,8 +3,6 @@
     March 30, 2022
     Description: A simple program to add to the database.
 """
-from asyncio.windows_events import NULL
-from email.policy import default
 import sqlite3
 import logging
 import dbcm
@@ -55,7 +53,6 @@ class DBOperations():
                     for k, value in weather.items():
                         data = (k, 'Winnipeg, MB', value['Min'], value['Max'], value['Mean'])
                         connection.execute(sql, data)
-                        print(data)
                     conn.commit()
                     print("Added sample successfully.")
                 except sqlite3.Error as exception:
@@ -84,12 +81,12 @@ class DBOperations():
         except Exception as exception:
             self.logger.INFO("DBOperations:purge_data:", exception)
 
-    def fetch_data(self, inital=default, final=default, year=default, month=default):
+    def fetch_data(self, inital=0, final=0, year=0, month=0):
         """returns the data from database"""
         try:
             try:
             #Get the latest date from the database
-                if inital == NULL and final == NULL and year == NULL and month == NULL:
+                if inital == 0 and final == 0 and year == 0 and month == 0:
                     with dbcm.DBCM("weather.sqlite") as conn:
                         connection = conn.cursor()
                         connection.execute("SELECT MAX(sample_date) FROM weather")
@@ -100,7 +97,7 @@ class DBOperations():
 
             try:
                 # Get the weather data for the boxplot
-                if inital != NULL and final != NULL:
+                if inital != 0 and final != 0:
                     with dbcm.DBCM("weather.sqlite") as conn:
                         connection = conn.cursor()
                         connection.execute(f"select * from weather WHERE sample_date between {inital} AND {final}")
@@ -111,7 +108,7 @@ class DBOperations():
 
             try:
                 # Get the weather data for the lineplot
-                if year != NULL and month != NULL:
+                if year != 0 and month != 0:
                     with dbcm.DBCM("weather.sqlite") as conn:
                         connection = conn.cursor()
                         test = f"select * from weather WHERE sample_date LIKE '{year}-{month}%'"
